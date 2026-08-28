@@ -1,0 +1,39 @@
+name: Rain Alert
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 6 * * *"
+
+jobs:
+  check-weather:
+    runs-on: ubuntu-latest
+
+    env:
+      OWM_API_KEY: ${{ secrets.OWM_API_KEY }}
+      TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
+      TWILIO_AUTH_TOKEN: ${{ secrets.TWILIO_AUTH_TOKEN }}
+
+      MY_EMAIL: ${{ secrets.MY_EMAIL }}
+      MY_PASSWORD: ${{ secrets.MY_PASSWORD }}
+
+      MY_LAT: ${{ secrets.MY_LAT }}
+      MY_LONG: ${{ secrets.MY_LONG }}
+
+      MY_PHONE: ${{ secrets.MY_PHONE }}
+      TWILIO_PHONE: ${{ secrets.TWILIO_PHONE }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Check weather
+        run: rain.py
