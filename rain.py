@@ -4,7 +4,6 @@ from twilio.rest import Client
 import smtplib
 
 
-# Get secrets from environment variables
 api_key = os.environ["OWM_API_KEY"]
 
 account_sid = os.environ["TWILIO_ACCOUNT_SID"]
@@ -20,11 +19,9 @@ MY_PHONE = os.environ["MY_PHONE"]
 TWILIO_PHONE = os.environ["TWILIO_PHONE"]
 
 
-# Set up Twilio
 client = Client(account_sid, auth_token)
 
 
-# OpenWeather parameters
 params = {
     "lat": MY_LAT,
     "lon": MY_LONG,
@@ -54,10 +51,8 @@ for hour_data in weather_data["list"]:
         will_rain = True
 
 
-# Send notifications
 if will_rain:
 
-    # EMAIL
     with smtplib.SMTP("smtp.gmail.com", 587) as connection:
 
         connection.starttls()
@@ -77,9 +72,8 @@ if will_rain:
             )
         )
 
-    # SMS
     message = client.messages.create(
-        body="sms_account_alerts",
+        body="sms_event_notifications",
         from_=TWILIO_PHONE,
         to=MY_PHONE
     )
